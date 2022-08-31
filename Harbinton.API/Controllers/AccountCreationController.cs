@@ -4,6 +4,7 @@ using AutoMapper;
 using Harbinton.API.Dto;
 using System.Net;
 using Harbinton.API.Model;
+using Harbinton.API.ResponseData;
 
 namespace Harbinton.API.Controllers
 {
@@ -46,7 +47,7 @@ namespace Harbinton.API.Controllers
             var details = await _repo.CreditAccount(accountNumber, Amount);
             if (details == null)
             {
-                return BadRequest();
+                return BadRequest("Account Not Found");
             }
             string note = $"Your account {details.AccountNumber} has been credited with {Amount} Current Account Balance is {details.Amount}";
             return Ok(note);
@@ -60,13 +61,31 @@ namespace Harbinton.API.Controllers
             {
                 return BadRequest();
             }
-            return Ok(await _repo.GetCustomerDetails(accountId, accountNumber));
+
+            DisplayDetailsDto detail = await _repo.GetCustomerDetails(accountId, accountNumber);
+            if(detail == null)
+            {
+                return BadRequest("Account Not Found");
+            }
+            return Ok(detail);  
         }
 
         [HttpPut("{accountNumber}/UpdateAccountDetails", Name = "UpdateAccountDetails")]
         public async Task<ActionResult> UpdateAccountDetails(string accountNumber,[FromBody] CreateUserDto user)
         {
             await _repo.UpdateAccountAsync(accountNumber, user);
+            return NoContent();
+        }
+
+        [HttpDelete("{accountNumber}")]
+        [ProducesResponseType(typeof(ResponseModel), (int)HttpStatusCode.NotFound)]
+        public async Task<ActionResult<ResponseModel>> DeleteAccount(string accountNumber)
+        {
+            ResponseModel model = await _repo.DeleteCustomerDetails(accountNumber);
+            if(model != null)
+            {
+                return NotFound(model);
+            }
             return NoContent();
         }
     }
