@@ -2,7 +2,9 @@
 using Harbinton.API.Database;
 using Harbinton.API.Dto;
 using Harbinton.API.Model;
+using Harbinton.API.ResponseData;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Harbinton.API.Contract.Implementation
 {
@@ -56,6 +58,10 @@ namespace Harbinton.API.Contract.Implementation
             if (accountNumber != null)
             {
                 Account acc = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == accountNumber);
+                if (acc == null)
+                {
+                    return null;
+                }
                 User userAcc = await _context.Users.FirstOrDefaultAsync(x => x.AccountId == acc.Id);
                 var mapUser = _mapper.Map<DisplayDetailsDto>(userAcc);
                 var mapAcc = _mapper.Map<AccountDto>(acc);
@@ -66,6 +72,10 @@ namespace Harbinton.API.Contract.Implementation
             if (accountId != null)
             {
                 Account acc = await _context.Accounts.FirstOrDefaultAsync(x => x.Id.ToString() == accountId);
+                if (acc == null)
+                {
+                    return null;
+                }
                 User userAcc = await _context.Users.FirstOrDefaultAsync(x => x.AccountId == acc.Id);
                 var mapUser = _mapper.Map<DisplayDetailsDto>(userAcc);
                 var mapAcc = _mapper.Map<AccountDto>(acc);
@@ -102,6 +112,27 @@ namespace Harbinton.API.Contract.Implementation
 
             _context.Users.Update(userUpdate);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<ResponseModel> DeleteCustomerDetails(string accountNumber)
+        {
+            Account detail = await _context.Accounts.FirstOrDefaultAsync(x => x.AccountNumber == accountNumber);
+            if (detail == null)
+            {
+                return new ResponseModel()
+                {
+                    Message = "Account Not Found",
+                    ResponseCode = (int)HttpStatusCode.NotFound,
+                    Status = "Failed",
+                    TransactionRef = accountNumber
+                };
+            }
+            User user = await _context.Users.Where(x => x.AccountId == detail.Id).FirstAsync();
+            _context.Accounts.Remove(detail);
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return null;
+
         }
     }
 }

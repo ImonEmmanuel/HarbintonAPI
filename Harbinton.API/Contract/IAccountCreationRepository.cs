@@ -1,5 +1,6 @@
 ﻿using Harbinton.API.Dto;
 using Harbinton.API.Model;
+using Harbinton.API.ResponseData;
 
 namespace Harbinton.API.Contract
 {
@@ -12,5 +13,6 @@ namespace Harbinton.API.Contract
         Task<IEnumerable<UserDto>> GetAllCustomer();
         Task<int> CreateAccount();
         Task<DisplayDetailsDto> GetCustomerDetails(string? accountId, string? accountNumber);
+        Task<ResponseModel> DeleteCustomerDetails(string accountNumber);
     }
 }
