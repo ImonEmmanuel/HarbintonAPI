@@ -12,7 +12,7 @@ namespace Harbinton.API.Model
         public string AccountNumber { get; set; }
         public int Amount { get; set; }
 
-        public static string Generate()
+        private static string Generate()
         {
             Random rand = new Random((int)DateTime.Now.Ticks);
 
