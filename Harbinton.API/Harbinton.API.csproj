@@ -22,4 +22,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Harbinton.API.Application\Harbinton.API.Application.csproj" />
+    <ProjectReference Include="..\Harbinton.API.Domain\Harbinton.API.Domain.csproj" />
+    <ProjectReference Include="..\Harbinton.API.Persitence\Harbinton.API.Persitence.csproj" />
+  </ItemGroup>
+
 </Project>
