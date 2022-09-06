@@ -1,10 +1,9 @@
-﻿using Harbinton.API.Contract;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using Harbinton.API.Dto;
 using System.Net;
-using Harbinton.API.Model;
-using Harbinton.API.ResponseData;
+using Harbinton.API.Application.Contracts.Persitence;
+using Harbinton.API.Application.Dto.User;
+using Harbinton.API.Application.ResponseData;
 
 namespace Harbinton.API.Controllers
 {

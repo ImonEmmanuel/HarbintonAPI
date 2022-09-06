@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Harbinton.API", "..\Harbinton\Harbinton.API\Harbinton.API.csproj", "{E0B24713-1412-4307-9FFE-A745C3567375}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harbinton.API", "Harbinton.API\Harbinton.API.csproj", "{E0B24713-1412-4307-9FFE-A745C3567375}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harbinton.API.Domain", "Harbinton.API.Domain\Harbinton.API.Domain.csproj", "{D19E18DB-2B1D-4733-B020-B541DDE131B7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harbinton.API.Application", "Harbinton.API.Application\Harbinton.API.Application.csproj", "{DD511526-9801-4B74-8440-3752581B7D9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Harbinton.API.Persitence", "Harbinton.API.Persitence\Harbinton.API.Persitence.csproj", "{B19A8F2E-92D1-4EC4-86E7-0A4353A43DF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{E0B24713-1412-4307-9FFE-A745C3567375}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0B24713-1412-4307-9FFE-A745C3567375}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0B24713-1412-4307-9FFE-A745C3567375}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D19E18DB-2B1D-4733-B020-B541DDE131B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D19E18DB-2B1D-4733-B020-B541DDE131B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D19E18DB-2B1D-4733-B020-B541DDE131B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D19E18DB-2B1D-4733-B020-B541DDE131B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD511526-9801-4B74-8440-3752581B7D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD511526-9801-4B74-8440-3752581B7D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD511526-9801-4B74-8440-3752581B7D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD511526-9801-4B74-8440-3752581B7D9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B19A8F2E-92D1-4EC4-86E7-0A4353A43DF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B19A8F2E-92D1-4EC4-86E7-0A4353A43DF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B19A8F2E-92D1-4EC4-86E7-0A4353A43DF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B19A8F2E-92D1-4EC4-86E7-0A4353A43DF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

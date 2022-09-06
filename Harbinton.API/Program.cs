@@ -1,7 +1,6 @@
-using Harbinton.API.Contract;
-using Harbinton.API.Contract.Implementation;
-using Harbinton.API.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Harbinton.API.Persitence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,17 +11,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration["ConnectionStrings:HarbintonDatabase"]);
-});
-
-builder.Services.AddScoped<IAccountCreationRepository, AccountCreationRepository>();
-builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-
+//Adding Persitence Service
+builder.Services.ConfigurePersitenceServices(builder.Configuration);
 //Add Automapper Service
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddCors(o =>
+{
+    o.AddPolicy("CorsPolicy",
+        builder => builder.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+});
 
 
 var app = builder.Build();
