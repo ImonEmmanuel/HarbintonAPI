@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Harbinton.API.Persitence;
+using Harbinton.API.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,9 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //Adding Persitence Service
+builder.Services.AddMvc();
 builder.Services.ConfigurePersitenceServices(builder.Configuration);
 //Add Automapper Service
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.ConfigureApplicationServices();
 
 builder.Services.AddCors(o =>
 {
@@ -37,6 +40,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 
 app.MapControllers();
 

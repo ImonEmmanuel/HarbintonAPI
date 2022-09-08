@@ -10,7 +10,6 @@ namespace Harbinton.API.Application.Contracts.Persitence
         Task<ResponseModel> BillPayment(string accountNumber, BillDto bill);
         Task<TransactionDto> GetStatus(string TransactionRef);
         Task<ResponseModel> Transfer(string AccountNumber, string AccountNumberToTransfer, int AmountToTransfer);
-
         Task<ResponseModel> TransactionResponse(string Status, string TransactionType , string Message, Transaction transaction, HttpStatusCode code);
     }
 }

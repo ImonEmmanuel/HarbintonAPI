@@ -4,6 +4,10 @@ using System.Net;
 using Harbinton.API.Application.Contracts.Persitence;
 using Harbinton.API.Application.Dto.User;
 using Harbinton.API.Application.ResponseData;
+using Microsoft.Extensions.Caching.Memory;
+using Harbinton.API.Application.Helper.Interface;
+using Microsoft.Extensions.Caching.Distributed;
+using Harbinton.API.Application.Extensions;
 
 namespace Harbinton.API.Controllers
 {
@@ -11,12 +15,15 @@ namespace Harbinton.API.Controllers
     [ApiController]
     public class AccountCreationController : Controller
     {
-        private readonly IMapper _mapper;
+        //private IAccountCacheHelper _cache;
         private readonly IAccountCreationRepository _repo;
-        public AccountCreationController(IAccountCreationRepository repo, IMapper mapper)
+        private readonly IMemoryCache _cache;
+        private readonly IExtensionCache _extensionCache;
+        public AccountCreationController(IAccountCreationRepository repo, IMemoryCache cache, IExtensionCache extensionCache)
         {
             _repo = repo;
-            _mapper = mapper;
+            _cache = cache;
+            _extensionCache = extensionCache;
         }
 
         [HttpPost("CreateAccount")]
@@ -36,8 +43,16 @@ namespace Harbinton.API.Controllers
         [ProducesResponseType(typeof(UserDto), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAllCustomer()
         {
-            var allCustomer = await _repo.GetAllCustomer();
-            return Ok(allCustomer);
+            string recordId = "AllUser";
+            if (_cache.TryGetValue(recordId, out string cacheValue) != false)
+            {
+                IEnumerable<UserDto> cacheData = await _extensionCache.GetRecordAsync<IEnumerable<UserDto>>(_cache,recordId);
+                return Ok(cacheData);
+            }
+            
+            var allData = await _repo.GetAllCustomer();
+            await _extensionCache.SetRecordAsync<IEnumerable<UserDto>>(_cache, allData, recordId);
+            return Ok(allData);
         }
 
         [HttpGet("{accountNumber}/CreditAccount", Name = "CreditAccount")]
@@ -58,15 +73,29 @@ namespace Harbinton.API.Controllers
         {
             if (accountId == null & accountNumber == null)
             {
-                return BadRequest();
+                return BadRequest("Supply either an AccountID or AccountNumber");
             }
+            string recordKey = "Customer";
 
-            DisplayDetailsDto detail = await _repo.GetCustomerDetails(accountId, accountNumber);
-            if(detail == null)
+            if (!string.IsNullOrEmpty(accountNumber))
+                recordKey = recordKey + accountNumber;
+
+            else
+                recordKey = recordKey + accountId;
+                
+
+            if (_cache.TryGetValue(recordKey, out string cacheValue) != false)
             {
-                return BadRequest("Account Not Found");
+                DisplayDetailsDto details = await _extensionCache.GetRecordAsync<DisplayDetailsDto>(_cache, recordKey);
+                return Ok(details);
             }
-            return Ok(detail);  
+            DisplayDetailsDto data = await _repo.GetCustomerDetails(accountId, accountNumber);
+            if (data == null)
+            {
+                return BadRequest("Account Not Found Supply a Valid Details");
+            }
+            await _extensionCache.SetRecordAsync<DisplayDetailsDto>(_cache, data, recordKey);
+            return Ok(data);
         }
 
         [HttpPut("{accountNumber}/UpdateAccountDetails", Name = "UpdateAccountDetails")]
